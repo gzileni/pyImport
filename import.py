@@ -32,7 +32,8 @@ def importLayers():
             path = localPath + '/' + layer["value"]
         else:
             path = layer["value"]
-            
+        
+        print('Read file: ' + path)
         df = geopandas.read_file(path) 
         df.to_postgis(str(layer["name"]),
                       db,
