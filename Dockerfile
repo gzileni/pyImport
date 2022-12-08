@@ -21,5 +21,3 @@ RUN /usr/app/src/venv/bin/python -m pip install numpy
 RUN /usr/app/src/venv/bin/python -m pip install numba
 RUN /usr/app/src/venv/bin/python -m pip install distributed
 RUN /usr/app/src/venv/bin/python -m pip install -r requirements.txt
-
-CMD [ "python", "./import.py"]

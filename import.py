@@ -28,11 +28,7 @@ def importLayers():
     cf = config.get('config.json')
     
     for layer in cf["layers"]:
-        if (str(layer["type"]).lower() == 'local'):
-            path = localPath + '/' + layer["value"]
-        else:
-            path = layer["value"]
-        
+        path = localPath + '/' + layer["value"]
         print('Read file: ' + path)
         df = geopandas.read_file(path) 
         df.to_postgis(str(layer["name"]),

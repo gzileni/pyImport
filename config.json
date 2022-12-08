@@ -1,32 +1,26 @@
 {
     "layers":[{
         "name": "edificato_ante_45",
-        "type": "remote",
-        "value": "https://github.com/pcm-dpc/DPC-Centri-Storici-Rischio-Sismico/raw/main/Dati/AreeEdificiAnte1945/Shapefile/EdificatoAnte1945.shp"
+        "value": "data/AreeEdificiAnte1945/Shapefile/EdificatoAnte1945.shp"
     },
     {
         "name": "centri_storici",
-        "type": "remote",
-        "value": "https://github.com/gzileni/DPC-Centri-Storici-Rischio-Sismico/raw/main/Dati/CentriStorici/Shapefile/CentriStorici.shp"
+        "value": "data/CentriStorici/Shapefile/CentriStorici.shp"
     },
     {
         "name": "pericolosita_frana",
-        "type": "local",
         "value": "data/Mosaicatura_ISPRA_2020_2021_aree_pericolosita_frana_PAI/Mosaicatura_ISPRA_2020_2021_aree_pericolosita_frana_PAI.shp"
     },
     {
         "name": "pericolosita_idraulica_elevata",
-        "type": "local",
         "value": "data/Mosaicatura_ISPRA_2020_aree_pericolosita_idraulica/Mosaicatura_ISPRA_2020_aree_pericolosita_idraulica_elevata.shp"
     },
     {
         "name": "pericolosita_idraulica_media",
-        "type": "local",
         "value": "data/Mosaicatura_ISPRA_2020_aree_pericolosita_idraulica/Mosaicatura_ISPRA_2020_aree_pericolosita_idraulica_media.shp"
     },
     {
         "name": "pericolosita_idraulica_bassa",
-        "type": "local",
         "value": "data/Mosaicatura_ISPRA_2020_aree_pericolosita_idraulica/Mosaicatura_ISPRA_2020_aree_pericolosita_idraulica_bassa.shp"
     }],
     "tracks": []
