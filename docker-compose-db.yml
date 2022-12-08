@@ -22,32 +22,6 @@ services:
     volumes:
       - .${PGDATA}:/var/lib/postgresql/data
 
-  import:
-    container_name: geo-import
-    build: .
-    image: geo-import
-    restart: always
-    environment:
-      PGHOST: "db"
-      POSTGRES_USER: ${POSTGRES_USER}
-      PGPASSWORD: ${PGPASSWORD}
-      POSTGRES_DATABASE_NAME: ${POSTGRES_DATABASE_NAME}
-      PGPORT: ${PGPORT}
-    healthcheck:
-      test: [ 'CMD-SHELL', 'pg_isready -U ${POSTGRES_DATABASE_NAME}' ]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-    ports:
-      - ${PGPORT}:${PGPORT}
-    networks:
-      - geo-network
-    volumes:
-      - .${PGDATA}:/var/lib/postgresql/data
-    depends_on:
-      - "db"
-    command: ["./wait-for-it.sh", "db:5432", "--", "python", "import.py"]
-
 networks:
    geo-network:
       driver: bridge

@@ -12,10 +12,9 @@ load_dotenv(dotenv_path=dotenv_path)
 
 def engine():
     url = "postgresql://" + \
-          str(os.getenv('PGUSER')) + ":" + \
+          str(os.getenv('POSTGRES_USER')) + ":" + \
           str(os.getenv('PGPASSWORD')) + "@" + \
           str(os.getenv('PGHOST')) + ":" + \
           str(os.getenv('PGPORT')) + "/" + \
-          str(os.getenv('PGDATABASE'))
-    print('database: ' + url)
+          str(os.getenv('POSTGRES_DATABASE_NAME'))
     return create_engine(url)
