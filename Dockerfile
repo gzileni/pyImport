@@ -1,6 +1,4 @@
-#Deriving the latest base image
-FROM python:3.8-slim
-LABEL Maintainer="Giuseppe Zileni <giuseppe.zileni@gmail.com>"
+FROM continuumio/miniconda3
 
 RUN apt-get update -q \
     && apt-get install --no-install-recommends -qy \
@@ -11,13 +9,15 @@ RUN apt-get update -q \
     inetutils-ping \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /usr/app/src
-COPY . ./
+WORKDIR /app
 
-RUN python -m venv /usr/app/src/venv
-RUN . /usr/app/src/venv/bin/activate
-RUN /usr/app/src/venv/bin/python -m pip install --upgrade pip
-RUN /usr/app/src/venv/bin/python -m pip install numpy
-RUN /usr/app/src/venv/bin/python -m pip install numba
-RUN /usr/app/src/venv/bin/python -m pip install distributed
-RUN /usr/app/src/venv/bin/python -m pip install -r requirements.txt
+RUN python -m venv /app/venv
+
+# The code to run when container is started:
+COPY . .
+RUN . /app/venv/bin/activate 
+RUN pip install python-dotenv
+RUN pip install geopandas
+RUN pip install sqlalchemy
+RUN pip install psycopg2
+RUN pip install geoalchemy2

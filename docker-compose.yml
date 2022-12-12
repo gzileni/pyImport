@@ -6,7 +6,7 @@ services:
     restart: always
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
-      PGPASSWORD: ${PGPASSWORD}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DATABASE_NAME: ${POSTGRES_DATABASE_NAME}
       PGPORT: ${PGPORT}
     healthcheck:
@@ -18,9 +18,24 @@ services:
       - ${PGPORT}:${PGPORT}
     networks:
       - geo-network
-    command: sh -c "/usr/local/bin/docker-entrypoint.sh postgres"
     volumes:
       - .${PGDATA}:/var/lib/postgresql/data
+  
+  pgAdmin:
+    # wharp-db.hextra.dev
+    container_name: geo-pgadmin
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+      PGPORT: ${PGPORT}
+    networks:
+      - geo-network
+    ports:
+      - '8081:80'
+    depends_on:
+      - db
 
   import:
     container_name: geo-import
@@ -30,23 +45,16 @@ services:
     environment:
       PGHOST: "db"
       POSTGRES_USER: ${POSTGRES_USER}
-      PGPASSWORD: ${PGPASSWORD}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DATABASE_NAME: ${POSTGRES_DATABASE_NAME}
       PGPORT: ${PGPORT}
-    healthcheck:
-      test: [ 'CMD-SHELL', 'pg_isready -U ${POSTGRES_DATABASE_NAME}' ]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-    ports:
-      - ${PGPORT}:${PGPORT}
     networks:
       - geo-network
     volumes:
       - .${PGDATA}:/var/lib/postgresql/data
     depends_on:
       - "db"
-    command: ["./wait-for-it.sh", "db:5432", "--", "python", "import.py"]
+    command: ["./wait-for-it.sh" , "db:5440" , "--strict" , "--timeout=60000", "--",  "python", "import.py"]
 
 networks:
    geo-network:

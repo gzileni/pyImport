@@ -31,9 +31,9 @@ def importLayers():
         path = localPath + '/' + layer["value"]
         print('Read file: ' + path)
         df = geopandas.read_file(path) 
-        df.to_postgis(str(layer["name"]),
+        df.to_postgis(str(layer["key"]),
                       db,
-                      if_exists="replace")  
+                      if_exists=layer["if_exists"])  
         
         print('import shape file to table ' + str(layer["value"]) + ' - Ok.')
 
