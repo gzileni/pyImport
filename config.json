@@ -20,19 +20,19 @@
     {
         "key": "pericolosita_idraulica_elevata",
         "name": "Pericolosità idraulica 2020 - Elevata",
-        "value": "data/Mosaicatura_ISPRA_2020_aree_pericolosita_idraulica/Mosaicatura_ISPRA_2020_pericolosita_idraulica_elevata.shp",
+        "value": "data/Mosaicatura_ISPRA_2020_aree_pericolosita_idraulica/HPH_Mosaicatura_ISPRA_2020_pericolosita_idraulica_elevata.shp",
         "if_exists": "replace"
     },
     {
         "key": "pericolosita_idraulica_media",
         "name": "Pericolosità idraulica 2020 - Media",
-        "value": "data/Mosaicatura_ISPRA_2020_aree_pericolosita_idraulica/Mosaicatura_ISPRA_2020_pericolosita_idraulica_media.shp",
+        "value": "data/Mosaicatura_ISPRA_2020_aree_pericolosita_idraulica/MPH_Mosaicatura_ISPRA_2020_pericolosita_idraulica_media.shp",
         "if_exists": "replace"
     },
     {
         "key": "pericolosita_idraulica_bassa",
         "name": "Pericolosità idraulica 2020 - Bassa",
-        "value": "data/Mosaicatura_ISPRA_2020_aree_pericolosita_idraulica/Mosaicatura_ISPRA_2020_pericolosita_idraulica_bassa.shp",
+        "value": "data/Mosaicatura_ISPRA_2020_aree_pericolosita_idraulica/LPH_Mosaicatura_ISPRA_2020_pericolosita_idraulica_bassa.shp",
         "if_exists": "replace"
     }],
     "tracks": []

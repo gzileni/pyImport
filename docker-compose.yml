@@ -54,8 +54,7 @@ services:
       - .${PGDATA}:/var/lib/postgresql/data
     depends_on:
       - "db"
-    command: ["./wait-for-it.sh" , "db:5440" , "--strict" , "--timeout=60000", "--",  "python", "import.py"]
-
+    
 networks:
    geo-network:
       driver: bridge
