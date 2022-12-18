@@ -8,6 +8,8 @@ Lo stack è disponibile con docker, prima di eseguire il comando:
 
 ```bash
 docker-compose up
+
+docker run --network pyimport_geo-network -e PGHOST=db  geo-import
 ```
 
 è necessario rinominare il file .env.template in .env e sostituire eventualmente il valore delle variabili

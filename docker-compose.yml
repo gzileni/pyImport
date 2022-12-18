@@ -38,8 +38,8 @@ services:
       - db
 
   import:
+    build: ./import
     container_name: geo-import
-    build: .
     image: geo-import
     restart: always
     environment:
@@ -48,13 +48,22 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DATABASE_NAME: ${POSTGRES_DATABASE_NAME}
       PGPORT: ${PGPORT}
+      USE_PYGEOS: 0
     networks:
       - geo-network
     volumes:
       - .${PGDATA}:/var/lib/postgresql/data
     depends_on:
       - "db"
-    
+    deploy:
+      resources:
+        limits:
+          cpus: '0.75'
+          memory: 6000M
+        reservations:
+          cpus: '0.50'
+          memory: 4000M
+
 networks:
    geo-network:
       driver: bridge

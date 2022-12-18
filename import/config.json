@@ -2,37 +2,37 @@
     "layers":[{
         "key": "edificato_ante_45",
         "name": "Edificato ante 1945",
-        "value": "data/AreeEdificiAnte1945/Shapefile/EdificatoAnte1945.shp",
+        "value": "AreeEdificiAnte1945/Shapefile/EdificatoAnte1945.shp",
         "if_exists": "replace"
     },
     {
         "key": "centri_storici",
         "name": "Centri storici",
-        "value": "data/CentriStorici/Shapefile/CentriStorici.shp",
+        "value": "CentriStorici/Shapefile/CentriStorici.shp",
         "if_exists": "replace"
     },
     {
         "key": "pericolosita_frana",
         "name": "Pericolosità frana 2020",
-        "value": "data/Mosaicatura_ISPRA_2020_2021_aree_pericolosita_frana_PAI/Mosaicatura_ISPRA_2020_2021_aree_pericolosita_frana_PAI.shp",
+        "value": "Mosaicatura_ISPRA_2020_2021_aree_pericolosita_frana_PAI/Mosaicatura_ISPRA_2020_2021_aree_pericolosita_frana_PAI.shp",
         "if_exists": "replace"
     },
     {
         "key": "pericolosita_idraulica_elevata",
         "name": "Pericolosità idraulica 2020 - Elevata",
-        "value": "data/Mosaicatura_ISPRA_2020_aree_pericolosita_idraulica/HPH_Mosaicatura_ISPRA_2020_pericolosita_idraulica_elevata.shp",
+        "value": "Mosaicatura_ISPRA_2020_aree_pericolosita_idraulica/HPH_Mosaicatura_ISPRA_2020_pericolosita_idraulica_elevata.shp",
         "if_exists": "replace"
     },
     {
         "key": "pericolosita_idraulica_media",
         "name": "Pericolosità idraulica 2020 - Media",
-        "value": "data/Mosaicatura_ISPRA_2020_aree_pericolosita_idraulica/MPH_Mosaicatura_ISPRA_2020_pericolosita_idraulica_media.shp",
+        "value": "Mosaicatura_ISPRA_2020_aree_pericolosita_idraulica/MPH_Mosaicatura_ISPRA_2020_pericolosita_idraulica_media.shp",
         "if_exists": "replace"
     },
     {
         "key": "pericolosita_idraulica_bassa",
         "name": "Pericolosità idraulica 2020 - Bassa",
-        "value": "data/Mosaicatura_ISPRA_2020_aree_pericolosita_idraulica/LPH_Mosaicatura_ISPRA_2020_pericolosita_idraulica_bassa.shp",
+        "value": "Mosaicatura_ISPRA_2020_aree_pericolosita_idraulica/LPH_Mosaicatura_ISPRA_2020_pericolosita_idraulica_bassa.shp",
         "if_exists": "replace"
     }],
     "tracks": []
