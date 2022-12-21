@@ -1,26 +1,34 @@
-FROM python:3.10.9-slim
+FROM python:3.9
 
-RUN apt-get update -q \
-    && apt-get install --no-install-recommends -qy \
-    gcc \      
-    gdal-bin \
-    libgdal-dev \
-    g++ \                          
-    inetutils-ping \
-    && rm -rf /var/lib/apt/lists/*
+# Install Java dependencies
+RUN apt-get -y update
+RUN apt-get install -y software-properties-common\
+    && apt-add-repository 'deb http://security.debian.org/debian-security stretch/updates main'
+
+# Install Java, GDAL & utils
+RUN apt-get update && apt-get install -y\
+    openjdk-8-jdk\
+    libgdal-dev\
+    ant\
+    ca-certificates-java\
+    wget\
+    tar\
+    bash\
+    nmap\
+    vim\
+    && apt-get clean\
+    && update-ca-certificates -f
 
 WORKDIR /app
-RUN mkdir parquet
+COPY . /app
 
-RUN python -m venv /app/venv
+ENV VIRTUAL_ENV=/app/venv
+RUN python3 -m venv $VIRTUAL_ENV
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
-# The code to run when container is started:
-COPY . .
+ENV PATH_DATA = "/app/data"
 
-RUN chmod +x import.py
-RUN . /app/venv/bin/activate 
-RUN pip install --upgrade python-dotenv dask_geopandas sqlalchemy \
-    psycopg2 geoalchemy2 pip aiohttp aiofiles pyogrio fastparquet \
-    pyarrow
-
-CMD ["python3", "import.py"]
+RUN pip3 install -r requirements.txt --no-cache-dir
+RUN pip3 install load_dotenv
+RUN pip3 install psycopg2
+RUN pip install geoalchemy2

@@ -18,3 +18,11 @@ def engine():
           str(os.getenv('PGPORT')) + "/" + \
           str(os.getenv('POSTGRES_DATABASE_NAME'))
     return create_engine(url)
+
+def save(geo_df, table, replace):
+      ife = "append" if replace == False or replace == None else "replace"
+      db = engine()
+      # geo_df = GeoDataFrame.from_file(path)
+      # Setting a Projection
+      geo_df.to_crs(4326)
+      geo_df.to_postgis(table, db, if_exists=ife)
