@@ -7,7 +7,7 @@ from sqlalchemy import *
 from sqlalchemy.engine import create_engine
 from sqlalchemy.schema import *
 
-dotenv_path = pathlib.Path('./.env')
+dotenv_path = pathlib.Path('../.env')
 load_dotenv(dotenv_path=dotenv_path)
 
 def engine():

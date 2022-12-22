@@ -20,8 +20,7 @@ docker run --network pyimport_geo-network --env-file .env geo-import shape ....
 
 ## API REST
 
-
 ## Esempi di uso
 
-- Studio del consumo del suolo e mappe di rischio 
+- Studio del consumo del suolo e mappe di rischio
 - Sito turistico con percorsi tracking

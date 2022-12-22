@@ -37,7 +37,8 @@ services:
       - db
 
   spark:
-    image: bitnami/spark
+    image: docker.io/bitnami/spark:3.3
+    container_name: spark
     environment:
       - SPARK_MODE=master
       - SPARK_RPC_AUTHENTICATION_ENABLED=no
@@ -50,9 +51,13 @@ services:
       - '10000:10000'
     volumes:
       - ./conf/log4j.properties:/opt/bitnami/spark/conf/log4j.properties
-    
+    command: ["sh", "-c", "./sbin/start-thriftserver.sh"]
+    networks:
+      - geo-network
+
   spark-worker:
-    image: bitnami/spark
+    image: docker.io/bitnami/spark:3.3
+    container_name: spark-worker
     environment:
       - SPARK_MODE=worker
       - SPARK_MASTER_URL=spark://spark:7077
@@ -62,9 +67,13 @@ services:
       - SPARK_RPC_ENCRYPTION_ENABLED=no
       - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
       - SPARK_SSL_ENABLED=no
+    networks:
+      - geo-network
     volumes:
       - ./conf/log4j.properties:/opt/bitnami/spark/conf/log4j.properties
-
+    depends_on:
+      - spark
+    
   spark-livy:
     build: ./livy
     container_name: spark-livy
@@ -94,6 +103,7 @@ services:
       - ./hue.ini:/usr/share/hue/desktop/conf/z-hue.ini
     networks:
       - geo-network
+
 networks:
    geo-network:
       driver: bridge
