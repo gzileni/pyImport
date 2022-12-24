@@ -1,0 +1,118 @@
+version: '3.8'
+services:
+  db:
+    container_name: geo-db
+    image: postgis/postgis:14-3.2-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DATABASE_NAME: ${POSTGRES_DATABASE_NAME}
+      PGPORT: ${PGPORT}
+    healthcheck:
+      test: [ 'CMD-SHELL', 'pg_isready -U ${POSTGRES_DATABASE_NAME}' ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    ports:
+      - ${PGPORT}:${PGPORT}
+    networks:
+      - geo-network
+    volumes:
+      - .${PGDATA}:/var/lib/postgresql/data
+  
+  pgAdmin:
+    container_name: geo-pgadmin
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+      PGPORT: ${PGPORT}
+    networks:
+      - geo-network
+    ports:
+      - '8083:80'
+    depends_on:
+      - db
+
+  spark:
+    image: docker.io/bitnami/spark:3.3
+    container_name: spark
+    environment:
+      - SPARK_MODE=master
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+    ports:
+      - '8080:8080'
+      - '7077:7077'
+      - '10000:10000'
+    volumes:
+      - ./conf/log4j.properties:/opt/bitnami/spark/conf/log4j.properties
+    command: ["sh", "-c", "./sbin/start-thriftserver.sh"]
+    networks:
+      - geo-network
+
+  spark-worker:
+    image: docker.io/bitnami/spark:3.3
+    container_name: spark-worker
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark:7077
+      - SPARK_WORKER_MEMORY=1G
+      - SPARK_WORKER_CORES=1
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+    networks:
+      - geo-network
+    volumes:
+      - ./conf/log4j.properties:/opt/bitnami/spark/conf/log4j.properties
+    depends_on:
+      - spark
+    
+  spark-livy:
+    build: ./livy
+    container_name: spark-livy
+    command: ["sh", "-c", "/opt/bitnami/livy/bin/livy-server"]
+    volumes:
+      - ./conf/:/opt/bitnami/livy/conf/
+      - ./spark/target/:/spark/target/
+      - ./spark/data/:/spark/data/
+    ports:
+      - '8998:8998'
+    networks:
+      - geo-network
+    depends_on:
+      - spark
+      - spark-worker
+
+  hue:
+    image: gethue/hue:latest
+    hostname: hue
+    container_name: hue
+    ports:
+      - "8888:8888"
+    depends_on:
+      - spark
+      - spark-worker
+    volumes:
+      - ./conf/hue.ini:/usr/share/hue/desktop/conf/z-hue.ini
+    networks:
+      - geo-network
+
+networks:
+   geo-network:
+      driver: bridge
+      ipam:
+         driver: default
+         config:
+            - subnet: 192.168.199.0/24
+
+volumes:
+  db:
+    driver: local
+

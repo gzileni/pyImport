@@ -1,0 +1,9 @@
+FROM bitnami/spark
+
+COPY ./sedona/* /opt/bitnami/spark/jars/
+
+USER root
+# needed so that thrift server can create the megastore_db directory
+RUN chmod g+w /opt/bitnami/spark
+
+CMD ["/bin/bash", "-c","/opt/bitnami/spark/bin/spark-submit --class org.apache.spark.sql.hive.thriftserver.HiveThriftServer2"] 

@@ -18,9 +18,11 @@ services:
       - ${PGPORT}:${PGPORT}
     networks:
       - geo-network
+    command: sh -c "/usr/local/bin/docker-entrypoint.sh postgres"
     volumes:
       - .${PGDATA}:/var/lib/postgresql/data
-  
+      - ./db-init-scripts:/docker-entrypoint-initdb.d
+
   pgAdmin:
     container_name: geo-pgadmin
     image: dpage/pgadmin4
@@ -36,64 +38,6 @@ services:
     depends_on:
       - db
 
-  spark:
-    image: bitnami/spark
-    environment:
-      - SPARK_MODE=master
-      - SPARK_RPC_AUTHENTICATION_ENABLED=no
-      - SPARK_RPC_ENCRYPTION_ENABLED=no
-      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
-      - SPARK_SSL_ENABLED=no
-    ports:
-      - '8080:8080'
-      - '7077:7077'
-      - '10000:10000'
-    volumes:
-      - ./conf/log4j.properties:/opt/bitnami/spark/conf/log4j.properties
-    
-  spark-worker:
-    image: bitnami/spark
-    environment:
-      - SPARK_MODE=worker
-      - SPARK_MASTER_URL=spark://spark:7077
-      - SPARK_WORKER_MEMORY=1G
-      - SPARK_WORKER_CORES=1
-      - SPARK_RPC_AUTHENTICATION_ENABLED=no
-      - SPARK_RPC_ENCRYPTION_ENABLED=no
-      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
-      - SPARK_SSL_ENABLED=no
-    volumes:
-      - ./conf/log4j.properties:/opt/bitnami/spark/conf/log4j.properties
-
-  spark-livy:
-    build: ./livy
-    container_name: spark-livy
-    command: ["sh", "-c", "/opt/bitnami/livy/bin/livy-server"]
-    volumes:
-      - ./conf/:/opt/bitnami/livy/conf/
-      - ./spark/target/:/spark/target/
-      - ./spark/data/:/spark/data/
-    ports:
-      - '8998:8998'
-    networks:
-      - geo-network
-    depends_on:
-      - spark
-      - spark-worker
-
-  hue:
-    image: gethue/hue:latest
-    hostname: hue
-    container_name: hue
-    ports:
-      - "8888:8888"
-    depends_on:
-      - spark
-      - spark-worker
-    volumes:
-      - ./hue.ini:/usr/share/hue/desktop/conf/z-hue.ini
-    networks:
-      - geo-network
 networks:
    geo-network:
       driver: bridge

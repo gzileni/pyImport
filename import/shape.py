@@ -13,7 +13,7 @@
 
 import os
 import database
-import spark
+import pandas as pd
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 
 os.environ['USE_PYGEOS'] = '0'
@@ -26,14 +26,11 @@ parser.add_argument("-t", "--table", default="",
                     help="table's name")
 parser.add_argument("-e", "--exists", default="replace", 
                     help="Method to write data append/replace")
-parser.add_argument("-s", "--engine", default="postgis",
-                    help="Send data to PostGIS (postgis) or Apache spark server (spark)")
 args = vars(parser.parse_args())
 
 fileData = args["file"]
 table = args["table"]
 ifexists = args["exists"]
-engine = args["engine"]
 
 from geopandas import GeoDataFrame  # Loading boundaries Data
 
@@ -44,15 +41,13 @@ def main():
             "E' necessario il nome del file con l'opzione -f. \n Usare --help per maggiori informazioni.")
     else:
         if (table == ""):
-            raise ValueError(
-                "E' necessario indicare il nome della tabella con l'opzione -t. \n Usare --help per maggiori informazioni.")
-        else:
-            path = os.getcwd() + '/data/' + fileData
-            geo_df = GeoDataFrame.from_file(path)
-            if (engine == "postgis"):
-                database.save(geo_df, table, ifexists)
-            elif (engine == 'spark'):
-                spark.send(geo_df, table)
+            table = str(fileData).lower()
+            
+        path = os.getcwd() + '/data/' + fileData + '.shp'
+        geo_df = GeoDataFrame.from_file(path)
+        # Setting a Projection
+        geo_df.to_crs(4326)
+        database.save_geo(geo_df, table, ifexists)
     
 if __name__ == '__main__':
     main()
