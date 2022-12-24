@@ -22,7 +22,8 @@ def uri():
 def engine():
     return create_engine(uri())
 
-def save_geo(geo_df, table, replace):
-      ife = "append" if replace == False or replace == None else "replace"
-      db = engine()
-      geo_df.to_postgis(table, db, if_exists=ife)
+def save_geo(geo_df, table, replace, schema):
+      geo_df.to_postgis(table, 
+                        engine(), 
+                        if_exists=replace, 
+                        schema=schema)

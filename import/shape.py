@@ -26,15 +26,18 @@ parser.add_argument("-t", "--table", default="",
                     help="table's name")
 parser.add_argument("-e", "--exists", default="replace", 
                     help="Method to write data append/replace")
+parser.add_argument("-s", "--schema", default="public", 
+                    help="Database schema")
 args = vars(parser.parse_args())
-
-fileData = args["file"]
-table = args["table"]
-ifexists = args["exists"]
 
 from geopandas import GeoDataFrame  # Loading boundaries Data
 
 def main():
+    
+    fileData = args["file"]
+    table = args["table"]
+    ifexists = args["exists"]
+    schema = args["schema"]
     
     if (fileData == ""):
         raise ValueError(
@@ -42,12 +45,11 @@ def main():
     else:
         if (table == ""):
             table = str(fileData).lower()
-            
         path = os.getcwd() + '/data/' + fileData + '.shp'
         geo_df = GeoDataFrame.from_file(path)
         # Setting a Projection
         geo_df.to_crs(4326)
-        database.save_geo(geo_df, table, ifexists)
+        database.save_geo(geo_df, table, ifexists, schema)     
     
 if __name__ == '__main__':
     main()

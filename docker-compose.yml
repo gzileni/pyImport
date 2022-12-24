@@ -40,6 +40,7 @@ services:
 
 networks:
    geo-network:
+      name: geo
       driver: bridge
       ipam:
          driver: default
