@@ -20,6 +20,7 @@ services:
       - geo-network
     volumes:
       - .${PGDATA}:/var/lib/postgresql/data
+      - ./db-init-scripts:/docker-entrypoint-initdb.d
   
   pgAdmin:
     # wharp-db.hextra.dev
